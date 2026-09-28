@@ -464,3 +464,35 @@ class TestSecurityBasics:
         for u in users:
             assert "password_hash" not in u
             assert "password" not in u
+
+
+# ---------- evidence graph (regression: /api/evidence-graph used to 500) ----------
+
+def test_evidence_graph_requirement(client):
+    """Every requirement selection must return a valid subgraph (was AttributeError)."""
+    h = login(client, "engineer@autocybergraph.io")
+    resp = client.get("/api/evidence-graph?requirement_id=1", headers=h)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["nodes"] and body["edges"]
+    ids = {n["id"] for n in body["nodes"]}
+    assert "CybersecurityRequirement:1" in ids
+    # chain edges must connect nodes inside the subgraph
+    for e in body["edges"]:
+        assert e["source"] in ids, e
+        assert e["target"] in ids, e
+    # the chain reaches beyond requirements (mechanisms / controls / tests / evidence)
+    types = {n["entity_type"] for n in body["nodes"]}
+    assert types & {"AutosarMechanism", "Control", "TestCase", "Evidence"}
+
+
+def test_evidence_graph_tara_and_release(client):
+    h = login(client, "engineer@autocybergraph.io")
+    for qs in ("tara_id=1", "release_id=1"):
+        resp = client.get(f"/api/evidence-graph?{qs}", headers=h)
+        assert resp.status_code == 200, resp.text
+        assert resp.json()["nodes"]
+
+
+def test_evidence_graph_requires_auth(client):
+    assert client.get("/api/evidence-graph?requirement_id=1").status_code == 401

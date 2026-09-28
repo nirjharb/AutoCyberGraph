@@ -34,6 +34,7 @@ class GraphNode:
     depth: int
     via: list[str] = field(default_factory=list)  # edge kind chain
     reason: str = ""
+    parent: tuple[str, int] | None = None  # (entity_type, entity_id) this node was reached from
 
 
 class GraphProtocol(Protocol):
@@ -168,9 +169,11 @@ class SqlGraphService:
         index = self._edges_indexed()
         start_label = self._lookup_label(entity_type, entity_id)
         seen: dict[tuple[str, int], GraphNode] = {}
-        queue: list[tuple[str, int, int, list[str], str]] = [(entity_type, entity_id, 0, [], "")]
+        queue: list[tuple[str, int, int, list[str], str, tuple[str, int] | None]] = [
+            (entity_type, entity_id, 0, [], "", None)
+        ]
         while queue:
-            et, eid, depth, chain, reason = queue.pop(0)
+            et, eid, depth, chain, reason, parent = queue.pop(0)
             key = (et, eid)
             if key in seen:
                 continue
@@ -181,6 +184,7 @@ class SqlGraphService:
                 depth=depth,
                 via=list(chain),
                 reason=reason,
+                parent=parent,
             )
             if depth >= max_depth:
                 continue
@@ -192,7 +196,7 @@ class SqlGraphService:
                 new_reason = (
                     f"{reason} → [{edge.description}]" if reason else f"[{edge.description}]"
                 )
-                queue.append((edge.target_type, edge.target_id, depth + 1, chain + [step], new_reason))
+                queue.append((edge.target_type, edge.target_id, depth + 1, chain + [step], new_reason, key))
         nodes = [n for n in seen.values() if not (n.entity_type == entity_type and n.entity_id == entity_id)]
         nodes.sort(key=lambda n: (n.depth, n.entity_type, n.entity_id))
         return nodes

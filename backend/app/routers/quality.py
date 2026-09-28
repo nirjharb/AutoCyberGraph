@@ -146,7 +146,8 @@ def evidence_graph(tara_id: int | None = None, requirement_id: int | None = None
         if key not in nodes_map:
             nodes_map[key] = {"id": f"{node.entity_type}:{node.entity_id}", "label": node.label,
                               "entity_type": node.entity_type, "entity_id": node.entity_id, "depth": node.depth}
-        # link to a previous-depth node by following first path step back is complex; use reason text edges
-        edges.append({"id": f"e{len(edges)}", "source": f"{start_type}:{start_id}",
-                      "target": f"{node.entity_type}:{node.entity_id}", "label": node.path[0] if node.path else ""})
+        # link each node to the node it was reached from (true chain edges)
+        parent = node.parent or (start_type, start_id)
+        edges.append({"id": f"e{len(edges)}", "source": f"{parent[0]}:{parent[1]}",
+                      "target": f"{node.entity_type}:{node.entity_id}", "label": node.via[-1] if node.via else ""})
     return {"nodes": list(nodes_map.values()), "edges": edges}
