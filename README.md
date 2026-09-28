@@ -3,6 +3,10 @@
 > **Connect Automotive Cybersecurity Risk to Reality.**
 
 <p align="center">
+  <img src="docs/images/03-dashboard.png" alt="AutoCyberGraph cybersecurity dashboard with live project metrics" width="900" />
+</p>
+
+<p align="center">
   <img src="docs/images/architecture.svg" alt="AutoCyberGraph architecture — frontend, FastAPI backend, graph data layer, traceability spine, Change Impact Engine and Cybersecurity Release Gate" width="900" />
 </p>
 
@@ -57,6 +61,10 @@ graph path that made it affected**. No guesses.
 - 🔐 **Security** — JWT + bcrypt, 7-role RBAC, audit logging, rate limiting, security headers ([threat model](docs/security.md))
 
 ## Demo workflow (≈3 minutes)
+
+Screenshots of every step: [`docs/images/`](docs/images/) — landing → dashboard → vehicle
+architecture → Gateway ECU → requirement traceability → CVE trace → change impact →
+release gate → CyberAdvisor → evidence graph.
 
 1. Sign in → **Demo EV Platform** → **Gateway ECU** → security context
 2. Open its **TARA** scenarios and requirement **CS-REQ-001**
