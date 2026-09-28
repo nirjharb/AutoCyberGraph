@@ -1,4 +1,13 @@
-# ---- AutoCyberGraph backend image (production) ----
+# ---- AutoCyberGraph backend image (production, self-contained) ----
+# Stage 1: build the frontend (dist/ is not committed to the repo)
+FROM node:20-slim AS frontend
+WORKDIR /build
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Python API + SPA
 FROM python:3.12-slim AS backend
 
 ENV PYTHONUNBUFFERED=1 \
@@ -15,7 +24,7 @@ COPY backend/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY backend/ ./backend/
-COPY frontend/dist/ ./frontend/dist/
+COPY --from=frontend /build/dist/ ./frontend/dist/
 
 WORKDIR /app/backend
 USER appuser

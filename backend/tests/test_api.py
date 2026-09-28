@@ -9,15 +9,14 @@ import, and the flagship integration test:
 from __future__ import annotations
 
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-
 from app.database import Base, get_db
 from app.main import app
 from app.services.risk import calculate_risk
 from app.services.seed import seed_demo_data
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 # ---------- test DB fixture ----------
 engine = create_engine(
