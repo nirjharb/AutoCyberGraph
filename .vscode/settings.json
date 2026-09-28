@@ -1,0 +1,24 @@
+{
+  "python.analysis.typeCheckingMode": "basic",
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "frontend/dist": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "frontend/dist": true,
+    "backend/alembic/versions": false
+  }
+}

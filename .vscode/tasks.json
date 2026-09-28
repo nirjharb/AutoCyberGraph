@@ -1,0 +1,87 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "setup: install everything",
+      "dependsOrder": "sequence",
+      "dependsOn": ["setup: backend deps", "setup: frontend deps", "setup: seed demo data"],
+      "group": "build"
+    },
+    {
+      "label": "setup: backend deps",
+      "type": "shell",
+      "command": "python3 -m pip install -r requirements.txt",
+      "cwd": "${workspaceFolder}/backend",
+      "problemMatcher": []
+    },
+    {
+      "label": "setup: frontend deps",
+      "type": "shell",
+      "command": "npm install",
+      "cwd": "${workspaceFolder}/frontend",
+      "problemMatcher": []
+    },
+    {
+      "label": "setup: seed demo data",
+      "type": "shell",
+      "command": "bash ../scripts/seed.sh",
+      "cwd": "${workspaceFolder}/backend",
+      "problemMatcher": []
+    },
+    {
+      "label": "dev: backend (uvicorn --reload)",
+      "type": "shell",
+      "command": "python3 -m uvicorn app.main:app --reload --port 8000",
+      "cwd": "${workspaceFolder}/backend",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "dev: frontend (vite)",
+      "type": "shell",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "test: all (backend + frontend + build)",
+      "type": "shell",
+      "command": "bash ../scripts/test-all.sh",
+      "cwd": "${workspaceFolder}/backend",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "test: backend (pytest)",
+      "type": "shell",
+      "command": "python3 -m pytest tests/ -q",
+      "cwd": "${workspaceFolder}/backend",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "test: frontend (vitest)",
+      "type": "shell",
+      "command": "npx vitest run",
+      "cwd": "${workspaceFolder}/frontend",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "build: frontend (production)",
+      "type": "shell",
+      "command": "npm run build",
+      "cwd": "${workspaceFolder}/frontend",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "reset: demo database",
+      "type": "shell",
+      "command": "bash ../scripts/reset-demo.sh",
+      "cwd": "${workspaceFolder}/backend",
+      "problemMatcher": []
+    }
+  ]
+}
