@@ -46,6 +46,34 @@ npm install
 npm run dev                       # http://localhost:5173
 ```
 
+## VS Code
+
+The repository ships ready-made VS Code configuration (`.vscode/`):
+
+| Feature | How |
+|---------|-----|
+| Recommended extensions | Prompted automatically (`extensions.json`) |
+| One-click setup | Terminal → Run Task → **`setup: install everything`** |
+| Debug backend (breakpoints in FastAPI) | Run & Debug → **`Backend: FastAPI (debug)`** (F5) |
+| Debug frontend dev server | **`Frontend: Vite dev server`** |
+| Both at once | **`Full Stack (API + UI)`** compound |
+| Run tests | Run Task → **`test: all`** (or `test: backend` / `test: frontend`) |
+| Reset demo data | Run Task → **`reset: demo database`** |
+
+Typical flow:
+
+1. Open the repository root in VS Code (`File → Open Folder…`)
+2. Accept the "Install recommended extensions" prompt
+3. Terminal → **Run Task…** → `setup: install everything`
+4. **F5** → pick `Full Stack (API + UI)`
+   - API + UI dev: `http://localhost:5173` (proxies `/api` to :8000)
+   - Or build once (`build: frontend`) and use just the backend at `http://localhost:8000`
+5. Sign in with a demo account (see above)
+
+> **Windows:** the `scripts/*.sh` tasks use bash — run them in **Git Bash** or **WSL**
+> (VS Code's default terminal profile can be set to Git Bash). The direct commands
+> (`python -m uvicorn …`, `npm run dev`) work in PowerShell too.
+
 ## Tests
 
 ```bash
