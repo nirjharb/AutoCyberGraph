@@ -1,0 +1,48 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "gateway-core",
+      "version": "2.5.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "mbedTLS crypto library",
+      "version": "2.5.0",
+      "purl": "pkg:generic/mbedtls@2.5.0",
+      "licenses": [{ "license": { "id": "Apache-2.0" } }],
+      "hashes": [{ "alg": "SHA-256", "content": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08" }]
+    },
+    {
+      "type": "library",
+      "name": "SecOC module",
+      "version": "3.2.1",
+      "purl": "pkg:generic/secoc@3.2.1",
+      "licenses": [{ "license": { "id": "Proprietary" } }]
+    },
+    {
+      "type": "application",
+      "name": "gateway-core",
+      "version": "2.5.0",
+      "purl": "pkg:generic/gateway-core@2.5.0"
+    },
+    {
+      "type": "library",
+      "name": "FreeRTOS",
+      "version": "10.5.1",
+      "purl": "pkg:generic/freertos@10.5.1",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "lwIP",
+      "version": "2.1.3",
+      "purl": "pkg:generic/lwip@2.1.3"
+    }
+  ]
+}

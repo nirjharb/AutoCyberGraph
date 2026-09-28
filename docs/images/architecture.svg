@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" font-family="Segoe UI, system-ui, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e14"/>
+      <stop offset="100%" stop-color="#0f1722"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrowDim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="980" height="560" fill="url(#bg)"/>
+  <text x="490" y="38" text-anchor="middle" fill="#e2e8f0" font-size="20" font-weight="700">AutoCyberGraph — Automotive Cybersecurity Digital Thread</text>
+  <text x="490" y="60" text-anchor="middle" fill="#22d3ee" font-size="12">Connect Automotive Cybersecurity Risk to Reality</text>
+
+  <!-- Frontend -->
+  <rect x="40" y="90" width="240" height="120" rx="12" fill="#13202e" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="160" y="118" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="700">Frontend</text>
+  <text x="160" y="140" text-anchor="middle" fill="#94a3b8" font-size="11">React · TypeScript · Vite</text>
+  <text x="160" y="158" text-anchor="middle" fill="#94a3b8" font-size="11">Tailwind · TanStack Query</text>
+  <text x="160" y="176" text-anchor="middle" fill="#94a3b8" font-size="11">Recharts · Cytoscape.js</text>
+  <text x="160" y="196" text-anchor="middle" fill="#64748b" font-size="10">Dashboard · TARA · Graphs · Gate</text>
+
+  <!-- Backend -->
+  <rect x="370" y="90" width="240" height="120" rx="12" fill="#13202e" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="490" y="118" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="700">Backend</text>
+  <text x="490" y="140" text-anchor="middle" fill="#94a3b8" font-size="11">FastAPI · Pydantic · SQLAlchemy</text>
+  <text x="490" y="158" text-anchor="middle" fill="#94a3b8" font-size="11">JWT Auth · RBAC · Audit Log</text>
+  <text x="490" y="176" text-anchor="middle" fill="#94a3b8" font-size="11">Impact Engine · Release Gate</text>
+  <text x="490" y="196" text-anchor="middle" fill="#64748b" font-size="10">OpenAPI · Rate limiting · Headers</text>
+
+  <!-- Database -->
+  <rect x="700" y="90" width="240" height="120" rx="12" fill="#13202e" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="820" y="118" text-anchor="middle" fill="#67e8f9" font-size="13" font-weight="700">Data &amp; Graph</text>
+  <text x="820" y="140" text-anchor="middle" fill="#94a3b8" font-size="11">PostgreSQL (prod) / SQLite (dev)</text>
+  <text x="820" y="158" text-anchor="middle" fill="#94a3b8" font-size="11">GraphService abstraction</text>
+  <text x="820" y="176" text-anchor="middle" fill="#94a3b8" font-size="11">Neo4j-ready protocol</text>
+  <text x="820" y="196" text-anchor="middle" fill="#64748b" font-size="10">18 entity types · typed edges</text>
+
+  <line x1="280" y1="150" x2="370" y2="150" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="610" y1="150" x2="700" y2="150" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- Traceability spine -->
+  <rect x="40" y="250" width="900" height="120" rx="12" fill="#0f1722" stroke="#334155"/>
+  <text x="60" y="278" fill="#67e8f9" font-size="12" font-weight="700">Traceability spine</text>
+  <text x="60" y="302" fill="#cbd5e1" font-size="11.5">Vehicle → ECU → Software → Asset → Threat → TARA → Goal → Requirement → Control → AUTOSAR Mechanism</text>
+  <text x="60" y="326" fill="#cbd5e1" font-size="11.5">→ Test Case → Test Result → Evidence → Release → R155 / R156 / 21434 / NIST mapping</text>
+  <text x="60" y="352" fill="#94a3b8" font-size="11">Software Component → SBOM → Vulnerability → ECU → Vehicle      ·      Change → Affected artifacts → Release Gate</text>
+
+  <!-- Change impact flow -->
+  <rect x="40" y="400" width="430" height="120" rx="12" fill="#13202e" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="255" y="428" text-anchor="middle" fill="#fdba74" font-size="13" font-weight="700">Change Impact Engine</text>
+  <text x="255" y="452" text-anchor="middle" fill="#94a3b8" font-size="11">BFS over real relationships — every affected object</text>
+  <text x="255" y="472" text-anchor="middle" fill="#94a3b8" font-size="11">carries the graph path that made it affected.</text>
+  <text x="255" y="498" text-anchor="middle" fill="#64748b" font-size="10.5">CRITICAL / HIGH / MEDIUM / LOW · recommended actions</text>
+
+  <!-- Release gate -->
+  <rect x="510" y="400" width="430" height="120" rx="12" fill="#13202e" stroke="#34d399" stroke-width="1.5"/>
+  <text x="725" y="428" text-anchor="middle" fill="#6ee7b7" font-size="13" font-weight="700">Cybersecurity Release Gate</text>
+  <text x="725" y="452" text-anchor="middle" fill="#94a3b8" font-size="11">PASS · REVIEW · HOLD — deterministic checks with reasons.</text>
+  <text x="725" y="472" text-anchor="middle" fill="#94a3b8" font-size="11">TARA · traceability · tests · CVEs · SBOM · evidence · impact</text>
+  <text x="725" y="498" text-anchor="middle" fill="#64748b" font-size="10.5">No vanity scores — always explain why</text>
+
+  <line x1="255" y1="370" x2="255" y2="400" stroke="#475569" stroke-width="1.4" marker-end="url(#arrowDim)"/>
+  <line x1="725" y1="370" x2="725" y2="400" stroke="#475569" stroke-width="1.4" marker-end="url(#arrowDim)"/>
+  <line x1="470" y1="460" x2="510" y2="460" stroke="#475569" stroke-width="1.4" marker-end="url(#arrowDim)"/>
+
+  <text x="490" y="548" text-anchor="middle" fill="#475569" font-size="9.5">Engineering &amp; evidence platform — not a certification or compliance tool</text>
+</svg>

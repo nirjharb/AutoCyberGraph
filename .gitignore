@@ -1,0 +1,40 @@
+# AutoCyberGraph .gitignore
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+backend/autocybergraph.db
+backend/uploads/
+
+# node
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# build / coverage
+build/
+dist/
+coverage/
+htmlcov/
+.coverage
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# docker
+pgdata/

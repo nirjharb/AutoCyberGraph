@@ -1,0 +1,107 @@
+"""Authentication (JWT + bcrypt) and RBAC dependencies. No secrets in code."""
+from __future__ import annotations
+
+import datetime as dt
+
+import bcrypt
+import jwt
+from fastapi import Depends, HTTPException, Request, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy.orm import Session
+
+from .config import get_settings
+from .database import get_db
+from .models import AuditLog, Role, User, UserStatus
+
+bearer_scheme = HTTPBearer(auto_error=False)
+
+WRITE_ROLES = {
+    Role.ADMIN,
+    Role.CYBERSECURITY_ENGINEER,
+    Role.ARCHITECT,
+    Role.TESTER,
+}
+ANALYSIS_ROLES = {Role.ADMIN, Role.CYBERSECURITY_ENGINEER, Role.ARCHITECT}
+ADMIN_ROLES = {Role.ADMIN}
+SUPPLIER_ROLES = {Role.SUPPLIER, Role.ADMIN, Role.CYBERSECURITY_ENGINEER}
+REVIEW_ROLES = {Role.ADMIN, Role.CYBERSECURITY_ENGINEER}
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
+
+
+def verify_password(password: str, password_hash: str) -> bool:
+    try:
+        return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+    except ValueError:
+        return False
+
+
+def create_access_token(user: User) -> str:
+    settings = get_settings()
+    now = dt.datetime.now(dt.timezone.utc)
+    payload = {
+        "sub": str(user.id),
+        "email": user.email,
+        "role": user.role.value,
+        "org": user.organization_id,
+        "iat": now,
+        "exp": now + dt.timedelta(minutes=settings.JWT_TTL_MINUTES),
+    }
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
+
+
+def decode_token(token: str) -> dict:
+    settings = get_settings()
+    try:
+        return jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
+    except jwt.ExpiredSignatureError as exc:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token expired") from exc
+    except jwt.InvalidTokenError as exc:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token") from exc
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    db: Session = Depends(get_db),
+) -> User:
+    if credentials is None:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
+    payload = decode_token(credentials.credentials)
+    user = db.get(User, int(payload["sub"]))
+    if user is None or user.status != UserStatus.ACTIVE:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found or inactive")
+    return user
+
+
+def require_roles(*roles: Role):
+    allowed = set(roles)
+
+    def checker(user: User = Depends(get_current_user)) -> User:
+        if user.role not in allowed and Role.ADMIN not in allowed:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, f"Requires role: {', '.join(r.value for r in allowed)}")
+        if user.role == Role.ADMIN:
+            return user
+        if user.role not in allowed:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "Insufficient role")
+        return user
+
+    return checker
+
+
+# Convenience composites
+require_admin = require_roles(*ADMIN_ROLES)
+require_write = require_roles(*WRITE_ROLES)
+require_analysis = require_roles(*ANALYSIS_ROLES)
+require_supplier_access = require_roles(*SUPPLIER_ROLES)
+require_reviewer = require_roles(*REVIEW_ROLES)
+
+
+def audit(db: Session, actor: str, action: str, entity_type: str = "", entity_id: int | None = None, detail: str = "") -> None:
+    db.add(AuditLog(actor=actor, action=action, entity_type=entity_type, entity_id=entity_id, detail=detail))
+    db.commit()
+
+
+def client_ip(request: Request) -> str:
+    return request.client.host if request.client else "unknown"

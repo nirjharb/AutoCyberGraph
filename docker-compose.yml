@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: autocybergraph
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: autocybergraph
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autocybergraph"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://autocybergraph:${POSTGRES_PASSWORD:-change-me}@db:5432/autocybergraph
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-0123456789abcdef}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8000}
+      SEED_DEMO_ON_STARTUP: ${SEED_DEMO_ON_STARTUP:-true}
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:

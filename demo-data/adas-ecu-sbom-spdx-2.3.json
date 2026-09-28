@@ -1,0 +1,38 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "adas-ecu-sbom",
+  "documentNamespace": "https://autocybergraph.local/demo/spdx/adas-ecu",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-adas-stack",
+      "name": "ADAS perception stack",
+      "versionInfo": "5.1.0",
+      "licenseConcluded": "Proprietary",
+      "downloadLocation": "NOASSERTION",
+      "checksums": [{ "algorithm": "SHA256", "checksumValue": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b" }]
+    },
+    {
+      "SPDXID": "SPDXRef-Package-libopencv",
+      "name": "OpenCV",
+      "versionInfo": "4.9.0",
+      "licenseConcluded": "Apache-2.0",
+      "downloadLocation": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:generic/opencv@4.9.0"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-Package-eigen",
+      "name": "Eigen",
+      "versionInfo": "3.4.0",
+      "licenseConcluded": "MPL-2.0",
+      "downloadLocation": "NOASSERTION"
+    }
+  ]
+}
