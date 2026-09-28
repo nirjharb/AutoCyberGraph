@@ -95,10 +95,12 @@ app.add_middleware(
 async def security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
-    response.headers.setdefault("X-Frame-Options", "DENY")
     response.headers.setdefault("Referrer-Policy", "no-referrer")
     response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    # X-Frame-Options is only sent in production. Preview environments render the
+    # app inside an iframe on a different origin, where DENY would block it.
     if settings.ENVIRONMENT == "production":
+        response.headers.setdefault("X-Frame-Options", "DENY")
         response.headers.setdefault(
             "Strict-Transport-Security", "max-age=63072000; includeSubDomains"
         )
@@ -106,6 +108,9 @@ async def security_headers(request: Request, call_next):
             "Content-Security-Policy",
             "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-ancestors 'none'",
         )
+    else:
+        # Allow embedding in hosted preview environments
+        response.headers.setdefault("Content-Security-Policy", "frame-ancestors *")
     return response
 
 
@@ -151,7 +156,7 @@ if _frontend_dist.exists():
     if _assets_dir.exists():
         app.mount("/assets", StaticFiles(directory=str(_assets_dir)), name="frontend-assets")
 
-    @app.get("/{full_path:path}", include_in_schema=False)
+    @app.api_route("/{full_path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     def spa_catch_all(full_path: str):
         """Serve the SPA for client-side routes; keep /api and real files intact."""
         candidate = _frontend_dist / full_path

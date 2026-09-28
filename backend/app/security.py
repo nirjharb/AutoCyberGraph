@@ -62,17 +62,63 @@ def decode_token(token: str) -> dict:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token") from exc
 
 
+def extract_token(request: Request, credentials: HTTPAuthorizationCredentials | None) -> str | None:
+    """
+    Token sources, in order. Hosted preview proxies may strip the standard
+    `Authorization` header, so the client also sends `X-Acg-Token`, the login
+    endpoint sets an `acg_token` cookie, and (outside production) a `?token=`
+    query fallback is accepted. See docs/security.md.
+    """
+    if credentials is not None and credentials.credentials:
+        return credentials.credentials
+    token = request.headers.get("x-acg-token")
+    if token:
+        return token
+    token = request.cookies.get("acg_token")
+    if token:
+        return token
+    if get_settings().ENVIRONMENT != "production":
+        token = request.query_params.get("token") or request.query_params.get("access_token")
+        if token:
+            return token
+    return None
+
+
 def get_current_user(
+    request: Request,
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
-    if credentials is None:
+    token = extract_token(request, credentials)
+    if token is None:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Not authenticated")
-    payload = decode_token(credentials.credentials)
+    payload = decode_token(token)
     user = db.get(User, int(payload["sub"]))
     if user is None or user.status != UserStatus.ACTIVE:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not found or inactive")
     return user
+
+
+def set_auth_cookie(response, token: str) -> None:
+    """Store the JWT in a SameSite=Lax cookie so auth survives header-stripping proxies.
+
+    SameSite=Lax blocks the cookie on cross-site state-changing requests, which
+    provides CSRF protection for cookie-based auth (see docs/security.md).
+    """
+    settings = get_settings()
+    response.set_cookie(
+        key="acg_token",
+        value=token,
+        max_age=settings.JWT_TTL_MINUTES * 60,
+        httponly=True,
+        samesite="lax",
+        secure=settings.ENVIRONMENT == "production",
+        path="/",
+    )
+
+
+def clear_auth_cookie(response) -> None:
+    response.delete_cookie("acg_token", path="/")
 
 
 def require_roles(*roles: Role):

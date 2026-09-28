@@ -450,7 +450,8 @@ class TestSecurityBasics:
     def test_security_headers(self, client):
         resp = client.get("/api/meta")
         assert resp.headers.get("X-Content-Type-Options") == "nosniff"
-        assert resp.headers.get("X-Frame-Options") == "DENY"
+        # X-Frame-Options is production-only so hosted previews can iframe the app
+        assert resp.headers.get("X-Frame-Options") is None
 
     def test_health(self, client):
         resp = client.get("/api/health")

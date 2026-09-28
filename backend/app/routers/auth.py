@@ -1,5 +1,5 @@
 """Auth + user management endpoints."""
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from sqlalchemy import select
@@ -15,6 +15,7 @@ from ..security import (
     get_current_user,
     hash_password,
     require_admin,
+    set_auth_cookie,
     verify_password,
 )
 
@@ -25,7 +26,7 @@ settings = get_settings()
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit(settings.RATE_LIMIT_AUTH)
-def register(request: Request, payload: RegisterRequest, db: Session = Depends(get_db)):
+def register(request: Request, response: Response, payload: RegisterRequest, db: Session = Depends(get_db)):
     if db.scalars(select(User).where(User.email == payload.email)).first():
         raise HTTPException(status.HTTP_409_CONFLICT, "Email already registered")
     org = db.scalars(select(Organization).where(Organization.name == payload.organization_name)).first()
@@ -44,19 +45,23 @@ def register(request: Request, payload: RegisterRequest, db: Session = Depends(g
     db.add(user)
     db.commit()
     audit(db, user.email, "user.register", "User", user.id)
-    return TokenResponse(access_token=create_access_token(user), user=UserOut.model_validate(user))
+    token = create_access_token(user)
+    set_auth_cookie(response, token)
+    return TokenResponse(access_token=token, user=UserOut.model_validate(user))
 
 
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit(settings.RATE_LIMIT_AUTH)
-def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)):
+def login(request: Request, response: Response, payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.scalars(select(User).where(User.email == payload.email)).first()
     if user is None or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid email or password")
     if user.status != UserStatus.ACTIVE:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Account is not active")
     audit(db, user.email, "user.login", "User", user.id)
-    return TokenResponse(access_token=create_access_token(user), user=UserOut.model_validate(user))
+    token = create_access_token(user)
+    set_auth_cookie(response, token)
+    return TokenResponse(access_token=token, user=UserOut.model_validate(user))
 
 
 @router.get("/me", response_model=UserOut)

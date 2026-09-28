@@ -48,9 +48,14 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
     ...(options.headers as Record<string, string>),
   };
   const token = getToken();
-  if (token) headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+    // Some hosted preview proxies strip `Authorization`; the backend also
+    // accepts X-Acg-Token and the auth cookie set at login.
+    headers["X-Acg-Token"] = token;
+  }
 
-  const resp = await fetch(path, { ...options, headers });
+  const resp = await fetch(path, { ...options, headers, credentials: "same-origin" });
   if (!resp.ok) {
     let detail = resp.statusText;
     try {
