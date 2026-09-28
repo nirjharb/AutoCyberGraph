@@ -5,7 +5,9 @@
 If you discover a security vulnerability in AutoCyberGraph, please report it
 responsibly:
 
-- **Email:** security@autocybergraph.example (placeholder — configure before public launch)
+- **Preferred: GitHub private reporting** —
+  [open a private security advisory](https://github.com/nirjharb/AutoCyberGraph/security/advisories/new)
+  (maintainer: [@nirjharb](https://github.com/nirjharb))
 - **Do not** open a public GitHub issue for exploitable vulnerabilities.
 - Include reproduction steps and impact assessment where possible.
 

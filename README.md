@@ -3,6 +3,15 @@
 > **Connect Automotive Cybersecurity Risk to Reality.**
 
 <p align="center">
+  <a href="https://github.com/nirjharb/AutoCyberGraph/actions/workflows/ci.yml"><img src="https://github.com/nirjharb/AutoCyberGraph/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License: Apache-2.0" /></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+" />
+  <img src="https://img.shields.io/badge/node-20%2B-blue.svg" alt="Node 20+" />
+  <a href="https://github.com/nirjharb/AutoCyberGraph/releases/tag/v0.1.0"><img src="https://img.shields.io/badge/release-v0.1.0-orange.svg" alt="Release v0.1.0" /></a>
+  <a href="https://www.linkedin.com/in/neerjhar/"><img src="https://img.shields.io/badge/LinkedIn-nirjharb-0A66C2.svg" alt="LinkedIn" /></a>
+</p>
+
+<p align="center">
   <img src="docs/images/03-dashboard.png" alt="AutoCyberGraph cybersecurity dashboard with live project metrics" width="900" />
 </p>
 
@@ -175,9 +184,18 @@ Report vulnerabilities privately — not via public issues.
 See [`CONTRIBUTING.md`](CONTRIBUTING.md). All contributions must respect the
 positioning rules: no compliance claims, no placeholder features, honest docs.
 
+## Author
+
+Designed and built by **[Nirjhar Banik](https://github.com/nirjharb)** as a solo project.
+
+- GitHub: **[@nirjharb](https://github.com/nirjharb)**
+- LinkedIn: **[neerjhar](https://www.linkedin.com/in/neerjhar/)**
+
+Questions, ideas, or collaboration? Reach out on LinkedIn or open a discussion/issue here.
+
 ## License
 
-Apache-2.0 — see [`LICENSE`](LICENSE).
+Apache-2.0 — see [`LICENSE`](LICENSE). Copyright 2026 Nirjhar Banik.
 
 ## Disclaimer
 

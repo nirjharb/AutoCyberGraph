@@ -1,7 +1,8 @@
 # AutoCyberGraph — Engineering Decisions (ADR log)
 
 > Rule from the brief: when multiple technically reasonable choices exist, pick
-> the simplest reliable one and record it here. Do not block on the user.
+> the simplest reliable one and record it here. Do not block on minor
+> engineering decisions.
 
 ## ADR-001 — Database: SQLAlchemy 2.0 over SQLite locally, PostgreSQL in production
 **Context:** The sandbox has no PostgreSQL server or Docker. The brief requires

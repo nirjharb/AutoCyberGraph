@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use AutoCyberGraph in your work, please cite it as below."
+title: "AutoCyberGraph: Connect Automotive Cybersecurity Risk to Reality"
+authors:
+  - family-names: Banik
+    given-names: Nirjhar
+type: software
+license: Apache-2.0
+version: 0.1.0
+repository-code: "https://github.com/nirjharb/AutoCyberGraph"
+url: "https://github.com/nirjharb/AutoCyberGraph"
+abstract: >-
+  Open-source automotive cybersecurity digital-thread and evidence-graph
+  platform connecting TARA, cybersecurity requirements, security controls,
+  AUTOSAR security mechanisms, tests, vulnerabilities, SBOMs and release
+  evidence, with graph-based change impact analysis and cybersecurity release
+  gates. Reference/mapping layers for ISO/SAE 21434, UNECE R155/R156 and
+  NIST SP 800-53.
+keywords:
+  - automotive cybersecurity
+  - iso-sae-21434
+  - un-r155
+  - un-r156
+  - tara
+  - traceability
+  - evidence graph
+  - digital thread
+  - sbom
+  - change impact analysis
