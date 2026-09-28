@@ -11,6 +11,7 @@
       "label": "setup: backend deps",
       "type": "shell",
       "command": "python3 -m pip install -r requirements.txt",
+      "windows": { "command": "python -m pip install -r requirements.txt" },
       "cwd": "${workspaceFolder}/backend",
       "problemMatcher": []
     },
@@ -24,14 +25,16 @@
     {
       "label": "setup: seed demo data",
       "type": "shell",
-      "command": "bash ../scripts/seed.sh",
+      "command": "python3 manage.py seed",
+      "windows": { "command": "python manage.py seed" },
       "cwd": "${workspaceFolder}/backend",
       "problemMatcher": []
     },
     {
       "label": "dev: backend (uvicorn --reload)",
       "type": "shell",
-      "command": "python3 -m uvicorn app.main:app --reload --port 8000",
+      "command": "python3 manage.py run",
+      "windows": { "command": "python manage.py run" },
       "cwd": "${workspaceFolder}/backend",
       "isBackground": true,
       "problemMatcher": []
@@ -45,17 +48,10 @@
       "problemMatcher": []
     },
     {
-      "label": "test: all (backend + frontend + build)",
-      "type": "shell",
-      "command": "bash ../scripts/test-all.sh",
-      "cwd": "${workspaceFolder}/backend",
-      "group": { "kind": "test", "isDefault": true },
-      "problemMatcher": []
-    },
-    {
       "label": "test: backend (pytest)",
       "type": "shell",
       "command": "python3 -m pytest tests/ -q",
+      "windows": { "command": "python -m pytest tests/ -q" },
       "cwd": "${workspaceFolder}/backend",
       "group": "test",
       "problemMatcher": []
@@ -65,7 +61,7 @@
       "type": "shell",
       "command": "npx vitest run",
       "cwd": "${workspaceFolder}/frontend",
-      "group": "test",
+      "group": { "kind": "test", "isDefault": true },
       "problemMatcher": []
     },
     {
@@ -79,7 +75,8 @@
     {
       "label": "reset: demo database",
       "type": "shell",
-      "command": "bash ../scripts/reset-demo.sh",
+      "command": "python3 manage.py reset",
+      "windows": { "command": "python manage.py reset" },
       "cwd": "${workspaceFolder}/backend",
       "problemMatcher": []
     }
